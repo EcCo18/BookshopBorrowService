@@ -1,6 +1,7 @@
 package com.example.borrowservice.services;
 
-import com.example.borrowservice.models.Book;
+
+import com.example.borrowservice.models.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
@@ -13,21 +14,21 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class BookService {
+public class UserService {
 
     private final RestTemplate restTemplate;
 
-    public boolean checkIfBookExists(int bookId) {
+    public boolean checkIfUserExists(int userId) {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         try {
-            ResponseEntity<Book> responseEntity =
-                    restTemplate.exchange("http://localhost:8081/api/book/" + bookId, HttpMethod.GET, entity, Book.class);
+            ResponseEntity<User> responseEntity =
+                    restTemplate.exchange("http://localhost:8081/api/user/" + userId, HttpMethod.GET, entity, User.class);
             return responseEntity.getStatusCode() == HttpStatus.OK;
         } catch (RestClientException ex) {
-            log.error("couldn't connect to bookService for checking if id: " + bookId + " is valid");
+            log.error("couldn't connect to userService to check if id: " + userId + " is valid");
         }
 
         return false;

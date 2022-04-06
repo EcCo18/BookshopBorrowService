@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/borrow")
@@ -30,7 +31,9 @@ public class BorrowController {
     @PostMapping()
     public ResponseEntity<BorrowDto> createBorrow(@Valid @RequestBody BorrowDto borrowDto) {
         log.info("received POST for borrow");
-        Borrow createdBorrow = borrowService.createBorrow(borrowMapper.mapDtoToBorrow(borrowDto));
-        return ResponseEntity.ok(borrowMapper.mapBorrowToDto(createdBorrow));
+        Optional<Borrow> createdBorrow = borrowService.createBorrow(borrowMapper.mapDtoToBorrow(borrowDto));
+        return createdBorrow
+                .map(borrow -> ResponseEntity.ok(borrowMapper.mapBorrowToDto(borrow)))
+                .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }
