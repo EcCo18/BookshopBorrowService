@@ -2,6 +2,8 @@ package com.example.borrowservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class BorrowServiceApplication {
@@ -10,4 +12,8 @@ public class BorrowServiceApplication {
         SpringApplication.run(BorrowServiceApplication.class, args);
     }
 
+    @Bean
+    public RestTemplate getRestTemplate() {
+        return new RestTemplate();
+    }
 }

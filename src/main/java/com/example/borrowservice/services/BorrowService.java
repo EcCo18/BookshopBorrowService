@@ -16,13 +16,16 @@ public class BorrowService {
 
     private final BorrowRepository borrowRepository;
     private final BorrowMetricService borrowMetricService;
+    private final BookService bookService;
 
     public List<Borrow> getAllBorrows() {
         log.debug("getting all borrows");
+        bookService.checkIfBookExists(1); // ToDo remove
         borrowMetricService.processReceived();
         return borrowRepository.findAll();
     }
 
+    // ToDo make requests to other services to validate data
     public Borrow createBorrow(Borrow borrow) {
         log.debug("creating borrow " + borrow);
         Borrow createdBorrow = borrowRepository.save(borrow);
