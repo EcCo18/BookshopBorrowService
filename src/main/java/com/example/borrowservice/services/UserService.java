@@ -28,7 +28,7 @@ public class UserService {
                     restTemplate.exchange("http://localhost:8081/api/user/" + userId, HttpMethod.GET, entity, User.class);
             return responseEntity.getStatusCode() == HttpStatus.OK;
         } catch (RestClientException ex) {
-            log.error("couldn't connect to userService to check if id: " + userId + " is valid");
+            log.error("couldn't connect to userService to check if userId: " + userId + " is valid");
         }
 
         return false;

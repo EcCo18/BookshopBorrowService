@@ -27,7 +27,7 @@ public class BookService {
                     restTemplate.exchange("http://localhost:8081/api/book/" + bookId, HttpMethod.GET, entity, Book.class);
             return responseEntity.getStatusCode() == HttpStatus.OK;
         } catch (RestClientException ex) {
-            log.error("couldn't connect to bookService for checking if id: " + bookId + " is valid");
+            log.error("couldn't connect to bookService for checking if bookId: " + bookId + " is valid");
         }
 
         return false;
