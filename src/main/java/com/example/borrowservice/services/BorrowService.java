@@ -19,4 +19,12 @@ public class BorrowService {
         log.debug("getting all borrows");
         return borrowRepository.findAll();
     }
+
+    public Borrow createBorrow(Borrow borrow) {
+        log.debug("creating borrow " + borrow);
+        Borrow createdBorrow = borrowRepository.save(borrow);
+        log.debug("created borrow " + createdBorrow);
+
+        return createdBorrow;
+    }
 }
