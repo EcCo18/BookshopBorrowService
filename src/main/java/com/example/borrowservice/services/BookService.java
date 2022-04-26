@@ -17,7 +17,6 @@ import java.util.List;
 public class BookService {
 
     private final RestTemplate restTemplate;
-    private final Environment environment;
 
     public boolean checkIfBookExists(int bookId) {
         HttpHeaders headers = new HttpHeaders();
@@ -25,9 +24,13 @@ public class BookService {
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         try {
+            String requestUrl = String.format("http://%s:%s/api/book/%d",
+                    System.getenv("BOOK_APP_SERVICE_SERVICE_HOST"),
+                    System.getenv("BOOK_APP_SERVICE_SERVICE_PORT"),
+                    bookId);
+            log.info(requestUrl);
             ResponseEntity<Book> responseEntity =
-                    restTemplate.exchange("http://" + environment.getProperty("environment.bookservice-url") +
-                            "/api/book/" + bookId, HttpMethod.GET, entity, Book.class);
+                    restTemplate.exchange(requestUrl, HttpMethod.GET, entity, Book.class);
 
             return responseEntity.getStatusCode() == HttpStatus.OK;
         } catch (RestClientException ex) {

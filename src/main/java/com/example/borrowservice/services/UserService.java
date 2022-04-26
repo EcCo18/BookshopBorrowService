@@ -4,7 +4,6 @@ package com.example.borrowservice.services;
 import com.example.borrowservice.models.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -18,7 +17,6 @@ import java.util.List;
 public class UserService {
 
     private final RestTemplate restTemplate;
-    private final Environment environment;
 
     public boolean checkIfUserExists(int userId) {
         HttpHeaders headers = new HttpHeaders();
@@ -26,9 +24,13 @@ public class UserService {
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
         try {
+            String requestUrl = String.format("http://%s:%s/api/user/%d",
+                    System.getenv("USER_APP_SERVICE_SERVICE_HOST"),
+                    System.getenv("USER_APP_SERVICE_SERVICE_PORT"),
+                    userId);
+            log.info(requestUrl);
             ResponseEntity<User> responseEntity =
-                    restTemplate.exchange("http://" + environment.getProperty("environment.userservice-url") +
-                            "/api/user/" + userId, HttpMethod.GET, entity, User.class);
+                    restTemplate.exchange(requestUrl, HttpMethod.GET, entity, User.class);
 
             return responseEntity.getStatusCode() == HttpStatus.OK;
         } catch (RestClientException ex) {
